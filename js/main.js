@@ -1,10 +1,28 @@
 // ─── Active nav link ─────────────────────────────────────────────────────────
 (function () {
-  const path = window.location.pathname.split('/').pop() || 'index.html';
+  function normalisePage(pathname) {
+    const page = pathname.split('/').pop();
+    return page && page !== '' ? page.toLowerCase() : 'index.html';
+  }
+
+  const currentPage = normalisePage(window.location.pathname);
+
   document.querySelectorAll('.nav-links a').forEach(link => {
     const href = link.getAttribute('href');
-    if (href === path || (path === '' && href === 'index.html')) {
+
+    if (!href || href.startsWith('#')) {
+      return;
+    }
+
+    const linkUrl = new URL(href, window.location.href);
+
+    if (linkUrl.origin !== window.location.origin) {
+      return;
+    }
+
+    if (normalisePage(linkUrl.pathname) === currentPage) {
       link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
     }
   });
 })();
