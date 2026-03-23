@@ -1,0 +1,7 @@
+User-Agent: *
+Allow: /img/
+Allow: /css/
+Allow: faq.html
+Allow: details.html
+Allow: index.html
+Allow: previous-events.html
