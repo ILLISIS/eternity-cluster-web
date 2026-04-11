@@ -28,6 +28,72 @@
 })();
 
 // ─── FAQ accordion ───────────────────────────────────────────────────────────
+(function () {
+  const nav = document.querySelector('.nav');
+  const navToggle = document.querySelector('.nav-toggle');
+  const navMenu = document.querySelector('.nav-menu');
+
+  if (!nav || !navToggle || !navMenu) {
+    return;
+  }
+
+  function closeNav() {
+    nav.classList.remove('nav-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-open');
+  }
+
+  function openNav() {
+    nav.classList.add('nav-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('nav-open');
+  }
+
+  navToggle.addEventListener('click', () => {
+    if (nav.classList.contains('nav-open')) {
+      closeNav();
+      return;
+    }
+
+    openNav();
+  });
+
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      closeNav();
+    });
+  });
+
+  document.addEventListener('click', event => {
+    if (!nav.classList.contains('nav-open')) {
+      return;
+    }
+
+    if (!nav.contains(event.target)) {
+      closeNav();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeNav();
+    }
+  });
+
+  const mobileNavMedia = window.matchMedia('(max-width: 820px)');
+  const handleNavMediaChange = event => {
+    if (!event.matches) {
+      closeNav();
+    }
+  };
+
+  if (typeof mobileNavMedia.addEventListener === 'function') {
+    mobileNavMedia.addEventListener('change', handleNavMediaChange);
+  } else {
+    mobileNavMedia.addListener(handleNavMediaChange);
+  }
+})();
+
 document.querySelectorAll('.faq-question').forEach(btn => {
   btn.addEventListener('click', () => {
     const item = btn.closest('.faq-item');
