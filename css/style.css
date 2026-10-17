@@ -1,18 +1,23 @@
 /* ─── Reset & Base ─────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Brand tokens: see brand/ in the event project. Orange accent, concrete black, Titillium Web. */
+@font-face { font-family: 'Titillium Web'; font-weight: 600; font-display: swap; src: url('../fonts/TitilliumWeb-SemiBold.woff2') format('woff2'); }
+@font-face { font-family: 'Titillium Web'; font-weight: 700; font-display: swap; src: url('../fonts/TitilliumWeb-Bold.woff2') format('woff2'); }
+
 :root {
-  --bg:          #0f1117;
-  --bg-2:        #161b27;
-  --bg-3:        #1e2436;
+  --bg:          #181A15;
+  --bg-2:        #1F211B;
+  --bg-3:        #2A2C25;
   --surface:     rgba(255,255,255,0.04);
   --border:      rgba(255,255,255,0.08);
-  --accent:      #4f7bef;
-  --accent-glow: rgba(79,123,239,0.35);
-  --accent-dim:  rgba(79,123,239,0.15);
-  --text:        #e2e8f0;
-  --text-muted:  #8b95a8;
-  --text-faint:  #4a5568;
+  --accent:      #FF9A1F;
+  --accent-glow: rgba(255,154,31,0.35);
+  --accent-dim:  rgba(255,154,31,0.15);
+  --on-accent:   #181A15;
+  --text:        #ECEAE4;
+  --text-muted:  #A3A096;
+  --text-faint:  #7D7A70;
   --radius:      10px;
   --nav-h:       64px;
   --transition:  0.2s ease;
@@ -23,7 +28,7 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-family: 'Titillium Web', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
@@ -36,9 +41,10 @@ body.nav-open {
 }
 
 a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
-a:hover { color: #7fa3f7; }
+a:hover { color: #FFB55C; }
 
 img { max-width: 100%; display: block; }
+button { font-family: inherit; }
 
 /* ─── Nav ───────────────────────────────────────────────────────────────────── */
 .nav {
@@ -46,7 +52,7 @@ img { max-width: 100%; display: block; }
   top: 0;
   z-index: 100;
   min-height: var(--nav-h);
-  background: rgba(15,17,23,0.75);
+  background: rgba(24,26,21,0.75);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -128,7 +134,7 @@ img { max-width: 100%; display: block; }
 
 .nav-toggle:hover {
   background: rgba(255,255,255,0.07);
-  border-color: rgba(79,123,239,0.35);
+  border-color: rgba(255,154,31,0.35);
   color: var(--accent);
 }
 
@@ -158,17 +164,17 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 0.45rem;
   background: var(--accent);
-  color: #fff !important;
+  color: var(--on-accent) !important;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   padding: 0.45rem 1.1rem;
   border-radius: 999px;
   transition: box-shadow var(--transition), background var(--transition);
 }
 .nav-discord:hover {
-  background: #6690f5;
+  background: #FFAA45;
   box-shadow: 0 0 18px var(--accent-glow);
-  color: #fff !important;
+  color: var(--on-accent) !important;
 }
 .nav-discord svg { flex-shrink: 0; }
 
@@ -187,18 +193,12 @@ img { max-width: 100%; display: block; }
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../img/hero.webp');
+  /* real footage: two servers, belts crossing the (green) border */
+  background-image: url('../img/hero-border.webp');
   background-size: cover;
-  background-position: center 30%;
-  opacity: 0.72;
-  mask-image:
-    radial-gradient(ellipse 55% 55% at 18% 100%, transparent 0%, black 55%),
-    linear-gradient(to bottom, black 50%, rgba(0,0,0,0.85) 80%, rgba(0,0,0,0.5) 100%);
-  -webkit-mask-image:
-    radial-gradient(ellipse 55% 55% at 18% 100%, transparent 0%, black 55%),
-    linear-gradient(to bottom, black 50%, rgba(0,0,0,0.85) 80%, rgba(0,0,0,0.5) 100%);
-  mask-composite: intersect;
-  -webkit-mask-composite: source-in;
+  background-position: center;
+  filter: blur(2px) saturate(0.8);
+  transform: scale(1.03);
   z-index: 0;
 }
 
@@ -207,8 +207,7 @@ img { max-width: 100%; display: block; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(79,123,239,0.10) 0%, transparent 70%),
-    linear-gradient(180deg, rgba(15,17,23,0.35) 0%, rgba(15,17,23,0.6) 60%, #0f1117 100%);
+    linear-gradient(180deg, rgba(24,26,21,0.62) 0%, rgba(24,26,21,0.72) 70%, var(--bg) 100%);
   z-index: 1;
 }
 
@@ -241,26 +240,36 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase;
   color: var(--accent);
   background: var(--accent-dim);
-  border: 1px solid rgba(79,123,239,0.3);
+  border: 1px solid rgba(255,154,31,0.3);
   padding: 0.3rem 0.85rem;
   border-radius: 999px;
   margin-bottom: 1.5rem;
 }
 
 .hero-title {
-  font-size: clamp(2.8rem, 7vw, 5rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: var(--text);
-  margin-bottom: 1.25rem;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 4px 4px 0 rgba(0,0,0,0.6);
 }
 
-.hero-title span {
-  background: linear-gradient(135deg, #7fa3f7 0%, #4f7bef 50%, #a78bfa 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hero-rule {
+  width: min(360px, 60%);
+  height: 6px;
+  background: var(--accent);
+  margin: 1.5rem auto 1.1rem;
+}
+
+.hero-sub {
+  font-size: clamp(1.05rem, 2.6vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
 }
 
 .hero-tagline {
@@ -293,12 +302,13 @@ img { max-width: 100%; display: block; }
 }
 .btn-primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
+  font-weight: 700;
 }
 .btn-primary:hover {
-  background: #6690f5;
+  background: #FFAA45;
   box-shadow: 0 0 22px var(--accent-glow);
-  color: #fff;
+  color: var(--on-accent);
 }
 .btn-ghost {
   background: var(--surface);
@@ -336,7 +346,8 @@ img { max-width: 100%; display: block; }
 .section-title {
   font-size: clamp(1.6rem, 3.5vw, 2.2rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
   color: var(--text);
   margin-bottom: 0.75rem;
 }
@@ -365,8 +376,8 @@ img { max-width: 100%; display: block; }
   gap: 0.6rem;
 }
 .card:hover {
-  border-color: rgba(79,123,239,0.4);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(79,123,239,0.12);
+  border-color: rgba(255,154,31,0.4);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,154,31,0.12);
   transform: translateY(-2px);
 }
 
@@ -394,7 +405,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 0.3rem;
 }
-.card-link:hover { color: #7fa3f7; }
+.card-link:hover { color: #FFB55C; }
 
 a.card { color: inherit; }
 a.card .card-title { transition: color var(--transition); }
@@ -464,7 +475,7 @@ a.card:hover .card-title { color: var(--accent); }
   height: 2rem;
   border-radius: 50%;
   background: var(--accent-dim);
-  border: 1px solid rgba(79,123,239,0.35);
+  border: 1px solid rgba(255,154,31,0.35);
   color: var(--accent);
   font-weight: 700;
   font-size: 0.8rem;
@@ -544,7 +555,7 @@ a.card:hover .card-title { color: var(--accent); }
 }
 
 .press-link:hover {
-  border-color: rgba(79,123,239,0.35);
+  border-color: rgba(255,154,31,0.35);
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   transform: translateY(-1px);
 }
@@ -582,7 +593,7 @@ a.card:hover .card-title { color: var(--accent); }
   overflow: hidden;
   transition: border-color var(--transition);
 }
-.faq-item.open { border-color: rgba(79,123,239,0.35); }
+.faq-item.open { border-color: rgba(255,154,31,0.35); }
 
 .faq-question {
   width: 100%;
@@ -630,7 +641,7 @@ a.card:hover .card-title { color: var(--accent); }
   padding-top: 1rem;
 }
 .faq-answer-inner a { color: var(--accent); }
-.faq-answer-inner a:hover { color: #7fa3f7; }
+.faq-answer-inner a:hover { color: #FFB55C; }
 
 /* ─── Image Fade Utility ────────────────────────────────────────────────────── */
 .fade-img {
@@ -695,7 +706,7 @@ footer p { overflow-wrap: anywhere; }
     align-items: stretch;
     gap: 0.75rem;
     padding: 1rem;
-    background: rgba(22,27,39,0.98);
+    background: rgba(31,33,27,0.98);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: 0 18px 48px rgba(0,0,0,0.45);
